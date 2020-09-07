@@ -1,0 +1,39 @@
+## Clear memory
+rm(list=ls())
+
+
+# 코로나19감염증으로 인한 시.도별 신규확진자, 신규사망자, 격리중인환자수, 격리해제환자수등에 대한 현황자료
+
+library(XML)
+library(stringr)
+
+api <- "http://openapi.data.go.kr/openapi/service/rest/Covid19/getCovid19SidoInfStateJson"
+api_key <- "HUE2W9DXP2VX6%2BzrHha%2B4olzgVaDqZ%2FbNgFQuW2XaZpK%2BPax%2BVBP2ZBbVEq9kxfZBww4dwkbIaUOIl4MyEU6iw%3D%3D"
+
+pageNo <- 1
+numOfRows <- 10
+startCreateDt <- 20200302
+endCreateDt <- 20200820
+url <- str_c(api,
+             "?serviceKey=", api_key,
+             "&pageNo=", pageNo,
+             "&numOfRows=", numOfRows,
+             "&startCreateDt=", startCreateDt,
+             "&endCreateDt", endCreateDt,
+             sep="")
+
+
+url
+
+# XML 파일 살펴보기
+xmlFile <- xmlParse(url)
+xmlRoot(xmlFile)
+selected.nodes <- getNodeSet(xmlFile, "//items/item")
+
+# XML 문서를 데이터 프레임으로 변환
+df <- xmlToDataFrame(selected.nodes)
+df
+View(df)
+
+
+
