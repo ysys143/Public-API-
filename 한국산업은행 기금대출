@@ -1,0 +1,66 @@
+# 한국산업은행 기금대출 정보
+
+## Clear memory
+rm(list=ls())
+
+
+# 한국산업은행 기금대출 문서 출력
+
+library(XML)
+library(stringr)
+
+api <- "http://apis.data.go.kr/B190030/GetFundLoanInfoService/getFundLoanList"
+api_key <- "HUE2W9DXP2VX6%2BzrHha%2B4olzgVaDqZ%2FbNgFQuW2XaZpK%2BPax%2BVBP2ZBbVEq9kxfZBww4dwkbIaUOIl4MyEU6iw%3D%3D"
+
+numOfRows <- 10
+pageNo <- 1
+bseYy <- "2020"
+url <- str_c(api,
+             "?serviceKey=", api_key,
+             "&numOfRows=", numOfRows,
+             "&pageNo=", pageNo,
+             "&bseYy=", bseYy,
+             sep="")
+
+url
+
+# XML 파일 살펴보기
+xmlFile <- xmlParse(url)
+xmlRoot(xmlFile)
+selected.nodes <- getNodeSet(xmlFile, "//items/item")
+
+# XML 문서를 데이터 프레임으로 변환
+df <- xmlToDataFrame(selected.nodes)
+df
+
+
+# 한국산업은행 예금상품 문서 출력
+
+
+
+api <- "http://apis.data.go.kr/B190030/GetDepositProductInfoService"
+api_key <- "HUE2W9DXP2VX6%2BzrHha%2B4olzgVaDqZ%2FbNgFQuW2XaZpK%2BPax%2BVBP2ZBbVEq9kxfZBww4dwkbIaUOIl4MyEU6iw%3D%3D"
+
+numOfRows <- 10
+pageNo <- 1
+sBseDt <- 20200101
+eBseDt <- 20200621
+url2 <- str_c(api,
+             "?serviceKey=", api_key,
+             "&numOfRows=", numOfRows,
+             "&pageNo=", pageNo,
+             "&sBseDt=", sBseDt,
+             "&eBseDt=", eBseDt,
+             sep="")
+
+url
+
+# XML 파일 살펴보기
+xmlFile <- xmlParse(url)
+xmlRoot(xmlFile)
+selected.nodes <- getNodeSet(xmlFile, "//items/item")
+
+# XML 문서를 데이터 프레임으로 변환
+df <- xmlToDataFrame(selected.nodes)
+df
+
